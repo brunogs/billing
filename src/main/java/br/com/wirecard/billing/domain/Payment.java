@@ -38,4 +38,6 @@ public class Payment {
 
     private Boleto boleto;
 
+    private PaymentStatus status = PaymentStatus.PENDENT;
+
 }
