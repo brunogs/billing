@@ -7,7 +7,9 @@ import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.Valid;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @Data
 @Document("payments")
@@ -18,6 +20,10 @@ public class Payment {
 
     @NotNull
     private PaymentType type;
+
+    @NotNull
+    @DecimalMin("0.01")
+    private BigDecimal amount;
 
     @Valid
     @NotNull

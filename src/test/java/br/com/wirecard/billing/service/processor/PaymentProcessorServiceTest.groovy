@@ -6,6 +6,7 @@ import br.com.wirecard.billing.domain.Client
 import br.com.wirecard.billing.domain.Payment
 import br.com.wirecard.billing.domain.PaymentType
 import org.springframework.beans.factory.annotation.Autowired
+import spock.lang.Unroll
 
 class PaymentProcessorServiceTest extends BillingApplicationTests {
 
@@ -17,6 +18,7 @@ class PaymentProcessorServiceTest extends BillingApplicationTests {
     void setup() {
         validPayment = new Payment(
                 client: new Client(id: UUID.randomUUID().toString()),
+                amount: BigDecimal.valueOf(42.0),
                 type: PaymentType.BOLETO,
                 buyer: new Buyer(
                         name: 'Buyer Test',
@@ -83,5 +85,21 @@ class PaymentProcessorServiceTest extends BillingApplicationTests {
             exception.message.contains("buyer.name must not be empty")
             exception.message.contains("buyer.email must be a well-formed email address")
             exception.message.contains("buyer.cpf invalid Brazilian individual taxpayer registry number (CPF)")
+    }
+
+    @Unroll
+    def "should validate amount field with value #invalidAmount"() {
+        given:
+            Payment paymentWithoutAmount = validPayment.with {
+                amount = invalidAmount
+                it
+            }
+        when:
+            boletoProcessorService.validate(paymentWithoutAmount)
+        then:
+            def exception = thrown(IllegalArgumentException)
+            exception.message.contains("amount must not be null") || exception.message.contains("amount must be greater than or equal to 0.01")
+        where:
+            invalidAmount << [null, 0, -3.4]
     }
 }
