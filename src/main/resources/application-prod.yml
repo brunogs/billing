@@ -1,0 +1,4 @@
+spring:
+  data:
+    mongodb:
+      uri: mongodb+srv://billing:xxLLHfM5yR69V78P@cluster0-iyf5d.mongodb.net/billing?retryWrites=true
