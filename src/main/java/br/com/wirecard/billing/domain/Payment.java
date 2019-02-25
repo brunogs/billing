@@ -1,10 +1,12 @@
 package br.com.wirecard.billing.domain;
 
+import br.com.wirecard.billing.domain.group.CreditCard;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Data
@@ -17,11 +19,15 @@ public class Payment {
     @NotNull
     private PaymentType type;
 
+    @Valid
     @NotNull
     private Client client;
 
+    @Valid
+    @NotNull
     private Buyer buyer;
 
+    @NotNull(groups = CreditCard.class)
     private Card card;
 
     private Boleto boleto;
