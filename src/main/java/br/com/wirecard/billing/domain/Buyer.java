@@ -2,6 +2,7 @@ package br.com.wirecard.billing.domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.validation.constraints.NotNull;
 
@@ -15,6 +16,7 @@ public class Buyer {
     @NotNull
     private String email;
 
+    @CPF
     @NotNull
     private String cpf;
 

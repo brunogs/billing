@@ -15,12 +15,12 @@ public class PaymentService {
         this.paymentProcessorServices = paymentProcessorServices;
     }
 
-    public Payment proccess(Payment payment) {
+    public Payment process(Payment payment) {
         PaymentProcessorService paymentProcessorService = paymentProcessorServices.stream()
                 .filter(it -> it.getType().equals(payment.getType()))
                 .findFirst()
                 .orElseThrow(IllegalArgumentException::new);
-        return paymentProcessorService.process(payment);
+        return paymentProcessorService.validateAndProcess(payment);
     }
 
 }
