@@ -5,6 +5,7 @@ import br.com.wirecard.billing.domain.Buyer
 import br.com.wirecard.billing.domain.Client
 import br.com.wirecard.billing.domain.Payment
 import br.com.wirecard.billing.domain.PaymentType
+import br.com.wirecard.billing.exception.UnprocessableEntityException
 import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Unroll
 
@@ -37,7 +38,7 @@ class PaymentProcessorServiceTest extends BillingApplicationTests {
         when:
             boletoProcessorService.validate(paymentWithoutClient)
         then:
-            def exception = thrown(IllegalArgumentException)
+            def exception = thrown(UnprocessableEntityException)
             exception.message.contains("client must not be null")
     }
 
@@ -50,7 +51,7 @@ class PaymentProcessorServiceTest extends BillingApplicationTests {
         when:
             boletoProcessorService.validate(paymentWithoutType)
         then:
-            def exception = thrown(IllegalArgumentException)
+            def exception = thrown(UnprocessableEntityException)
             exception.message.contains("type must not be null")
     }
 
@@ -63,7 +64,7 @@ class PaymentProcessorServiceTest extends BillingApplicationTests {
         when:
             boletoProcessorService.validate(paymentWithoutBuyer)
         then:
-            def exception = thrown(IllegalArgumentException)
+            def exception = thrown(UnprocessableEntityException)
             exception.message.contains("buyer must not be null")
     }
 
@@ -81,7 +82,7 @@ class PaymentProcessorServiceTest extends BillingApplicationTests {
         when:
             boletoProcessorService.validate(paymentWithInvalidBuyer)
         then:
-            def exception = thrown(IllegalArgumentException)
+            def exception = thrown(UnprocessableEntityException)
             exception.message.contains("buyer.name must not be empty")
             exception.message.contains("buyer.email must be a well-formed email address")
             exception.message.contains("buyer.cpf invalid Brazilian individual taxpayer registry number (CPF)")
@@ -97,7 +98,7 @@ class PaymentProcessorServiceTest extends BillingApplicationTests {
         when:
             boletoProcessorService.validate(paymentWithoutAmount)
         then:
-            def exception = thrown(IllegalArgumentException)
+            def exception = thrown(UnprocessableEntityException)
             exception.message.contains("amount must not be null") || exception.message.contains("amount must be greater than or equal to 0.01")
         where:
             invalidAmount << [null, 0, -3.4]

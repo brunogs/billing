@@ -38,6 +38,7 @@ class BoletoProcessorServiceTest extends BillingApplicationTests {
         then:
             paymentRepository.findById(processedPayment.id).get().with {
                 assert it.boleto.barcode != null
+                assert it.type == PaymentType.BOLETO
                 assert it.status == PaymentStatus.PENDENT
             }
     }

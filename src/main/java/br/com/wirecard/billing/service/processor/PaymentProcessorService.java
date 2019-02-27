@@ -2,12 +2,17 @@ package br.com.wirecard.billing.service.processor;
 
 import br.com.wirecard.billing.domain.Payment;
 import br.com.wirecard.billing.domain.PaymentType;
+import br.com.wirecard.billing.exception.ServiceUnavailableException;
+import br.com.wirecard.billing.exception.UnprocessableEntityException;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.Valid;
 import javax.validation.Validator;
 
 import static java.util.stream.Collectors.joining;
 
+@Slf4j
 public abstract class PaymentProcessorService {
 
     private final Validator validator;
@@ -16,7 +21,12 @@ public abstract class PaymentProcessorService {
         this.validator = validator;
     }
 
-    public Payment validateAndProcess(@Valid Payment payment) {
+    @HystrixCommand(
+            commandKey = "validateAndProcess",
+            fallbackMethod = "validateAndProcessFallback",
+            ignoreExceptions = UnprocessableEntityException.class
+    )
+    public Payment validateAndProcess(Payment payment) {
         validate(payment);
         return process(payment);
     }
@@ -27,8 +37,16 @@ public abstract class PaymentProcessorService {
             var constraints = constraintViolations.stream()
                     .map(it -> it.getPropertyPath() + " " + it.getMessage())
                     .collect(joining(";"));
-            throw new IllegalArgumentException(constraints);
+            throw new UnprocessableEntityException(constraints);
         }
+    }
+
+    public Payment validateAndProcessFallback(Payment payment) {
+        //TODO here we can direct to another gateway
+        log.warn("processing fallback. payment={}", payment);
+
+        var message = "Serviço temporariamente indisponivel tente outro tipo de pagamento";
+        throw new ServiceUnavailableException(message);
     }
 
     protected abstract Payment process(Payment payment);

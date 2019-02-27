@@ -3,7 +3,6 @@ package br.com.wirecard.billing.domain;
 import lombok.Data;
 
 import javax.validation.constraints.NotNull;
-import java.time.YearMonth;
 
 @Data
 public class Card {
@@ -15,7 +14,7 @@ public class Card {
     private String number;
 
     @NotNull
-    private YearMonth expirationDate;
+    private String expirationDate;
 
     private int cvv;
 

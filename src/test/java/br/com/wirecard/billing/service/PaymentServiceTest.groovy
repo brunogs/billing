@@ -1,7 +1,10 @@
 package br.com.wirecard.billing.service
 
+import br.com.wirecard.billing.client.PaymentGatewayClient
 import br.com.wirecard.billing.domain.Payment
 import br.com.wirecard.billing.domain.PaymentType
+import br.com.wirecard.billing.exception.UnprocessableEntityException
+import br.com.wirecard.billing.repository.PaymentRepository
 import br.com.wirecard.billing.service.processor.BoletoProcessorService
 import br.com.wirecard.billing.service.processor.CardProcessorService
 import br.com.wirecard.billing.service.processor.PaymentProcessorService
@@ -17,11 +20,15 @@ class PaymentServiceTest extends Specification {
     private PaymentProcessorService boletoProcessorServiceSpy
     private PaymentProcessorService cardProcessorServiceSpy
     private Validator validatorMock
+    private PaymentRepository paymentRepositoryMock
+    private PaymentGatewayClient paymentGatewayClientMock
 
     void setup() {
         validatorMock = Mock(Validator)
-        boletoProcessorServiceSpy = Spy(BoletoProcessorService, constructorArgs: [validatorMock])
-        cardProcessorServiceSpy = Spy(CardProcessorService, constructorArgs: [validatorMock])
+        paymentRepositoryMock = Mock(PaymentRepository)
+        paymentGatewayClientMock = Mock(PaymentGatewayClient)
+        boletoProcessorServiceSpy = Spy(BoletoProcessorService, constructorArgs: [validatorMock, paymentRepositoryMock])
+        cardProcessorServiceSpy = Spy(CardProcessorService, constructorArgs: [validatorMock, paymentGatewayClientMock, paymentRepositoryMock])
         paymentService = new PaymentService([boletoProcessorServiceSpy, cardProcessorServiceSpy])
 
         validatorMock.validate(*_) >> emptySet()
@@ -42,10 +49,11 @@ class PaymentServiceTest extends Specification {
         when:
             paymentService.process(payment)
         then:
+            1 * paymentGatewayClientMock.processCardPayment(_) >> Optional.empty()
             1 * cardProcessorServiceSpy.validateAndProcess(payment)
     }
 
-    def "givan an invalid type should do nothing"() {
+    def "given an invalid type should do nothing"() {
         given:
             def payment = new Payment()
         when:
@@ -53,6 +61,6 @@ class PaymentServiceTest extends Specification {
         then:
             0 * boletoProcessorServiceSpy.validateAndProcess(payment)
             0 * cardProcessorServiceSpy.validateAndProcess(payment)
-            thrown(IllegalArgumentException)
+            thrown(UnprocessableEntityException)
     }
 }

@@ -1,6 +1,7 @@
 package br.com.wirecard.billing.service;
 
 import br.com.wirecard.billing.domain.Payment;
+import br.com.wirecard.billing.exception.UnprocessableEntityException;
 import br.com.wirecard.billing.service.processor.PaymentProcessorService;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,7 @@ public class PaymentService {
         PaymentProcessorService paymentProcessorService = paymentProcessorServices.stream()
                 .filter(it -> it.getType().equals(payment.getType()))
                 .findFirst()
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(UnprocessableEntityException::new);
         return paymentProcessorService.validateAndProcess(payment);
     }
 
