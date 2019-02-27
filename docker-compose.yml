@@ -1,0 +1,12 @@
+version: '3.1'
+
+services:
+  billing:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    restart: always
+    container_name: billing
+    ports:
+      - 8080:8080
+    working_dir: /
