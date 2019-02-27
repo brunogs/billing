@@ -1,13 +1,14 @@
 package br.com.wirecard.billing.exception;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
+import static org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY;
+
+@ResponseStatus(UNPROCESSABLE_ENTITY)
 public class UnprocessableEntityException extends RuntimeException {
 
     public UnprocessableEntityException() {
-        super(HttpStatus.UNPROCESSABLE_ENTITY.getReasonPhrase());
+        super(UNPROCESSABLE_ENTITY.getReasonPhrase());
     }
 
     public UnprocessableEntityException(String customMessage) {

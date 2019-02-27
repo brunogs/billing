@@ -5,6 +5,7 @@ import br.com.wirecard.billing.domain.PaymentType;
 import br.com.wirecard.billing.exception.ServiceUnavailableException;
 import br.com.wirecard.billing.exception.UnprocessableEntityException;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.validation.Valid;
@@ -24,7 +25,10 @@ public abstract class PaymentProcessorService {
     @HystrixCommand(
             commandKey = "validateAndProcess",
             fallbackMethod = "validateAndProcessFallback",
-            ignoreExceptions = UnprocessableEntityException.class
+            ignoreExceptions = UnprocessableEntityException.class,
+            commandProperties = {
+                    @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "10000")
+            }
     )
     public Payment validateAndProcess(Payment payment) {
         validate(payment);

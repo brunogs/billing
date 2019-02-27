@@ -29,7 +29,7 @@ class PaymentServiceTest extends Specification {
         paymentGatewayClientMock = Mock(PaymentGatewayClient)
         boletoProcessorServiceSpy = Spy(BoletoProcessorService, constructorArgs: [validatorMock, paymentRepositoryMock])
         cardProcessorServiceSpy = Spy(CardProcessorService, constructorArgs: [validatorMock, paymentGatewayClientMock, paymentRepositoryMock])
-        paymentService = new PaymentService([boletoProcessorServiceSpy, cardProcessorServiceSpy])
+        paymentService = new PaymentService([boletoProcessorServiceSpy, cardProcessorServiceSpy], paymentRepositoryMock)
 
         validatorMock.validate(*_) >> emptySet()
     }

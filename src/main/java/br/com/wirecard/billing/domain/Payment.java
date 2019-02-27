@@ -3,15 +3,18 @@ package br.com.wirecard.billing.domain;
 import br.com.wirecard.billing.domain.group.CreditCard;
 import lombok.AccessLevel;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.Valid;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.math.BigDecimal;
 
 @Data
+@NoArgsConstructor
 @Document("payments")
 public class Payment {
 
