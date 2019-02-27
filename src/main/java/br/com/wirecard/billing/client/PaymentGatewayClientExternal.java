@@ -1,9 +1,9 @@
 package br.com.wirecard.billing.client;
 
 import br.com.wirecard.billing.domain.Payment;
-import br.com.wirecard.billing.domain.PaymentStatus;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
@@ -11,11 +11,16 @@ import java.util.Optional;
 @Component
 public class PaymentGatewayClientExternal implements PaymentGatewayClient {
 
+    private RestTemplate restTemplate;
+
+    public PaymentGatewayClientExternal() {
+        this.restTemplate = new RestTemplate();
+    }
+
     @Override
     public Optional<Payment> processCardPayment(Payment payment) throws Exception {
-        //TODO request mock server
-        Payment paymentResult = new Payment();
-        paymentResult.setStatus(PaymentStatus.AUTHORIZED);
+        Payment paymentResult = restTemplate.postForEntity("http://mockkid:8080/card-payment", payment, Payment.class).getBody();
+        paymentResult.setStatus(paymentResult.getStatus());
         return Optional.of(paymentResult);
     }
 

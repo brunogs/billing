@@ -1,0 +1,13 @@
+configuration:
+  endpoint:
+    url: /card-payment
+    method: POST
+  responseConfigurations:
+    - responseConfiguration:
+      name: "config1"
+      response:
+        status: 200
+        headers:
+          content-type: application/json
+        body: |
+          { "status": "AUTHORIZED"}

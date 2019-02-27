@@ -1,12 +1,11 @@
 FROM maven:3.6.0-jdk-11-slim
 WORKDIR /billing
-VOLUME /tmp
 ENV JAVA_OPTS=""
 
 ADD pom.xml /billing/pom.xml
 ADD src /billing/src
 RUN ["mvn", "clean"]
-RUN ["mvn", "package"]
+RUN ["mvn", "package", "-DskipTests=true"]
 
 RUN cp /billing/target/billing.jar ./app.jar
 

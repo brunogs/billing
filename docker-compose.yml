@@ -2,11 +2,21 @@ version: '3.1'
 
 services:
   billing:
-    build:
-      context: ./
-      dockerfile: Dockerfile
+    build: .
     restart: always
-    container_name: billing
+    container_name: billing-container
     ports:
       - 8080:8080
-    working_dir: /
+    working_dir: /billing
+    depends_on:
+      - mockkid
+
+  mockkid:
+    image: febpetroni/mockkid
+    container_name: mockkid-container
+    hostname: mockkid
+    ports:
+      - "9080:8080"
+    volumes:
+      - ./mocks/:/configs/
+    restart: always
