@@ -13,6 +13,7 @@
 - Spock
 - MongoDB (flapdoodle testes e MongoAtlas remoto)
 - Docker (WIP)
+- Mockkid da Wirecard (WIP)
 
 ## WIP
 
