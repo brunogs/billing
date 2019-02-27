@@ -4,7 +4,6 @@ import br.com.wirecard.billing.client.PaymentGatewayClient;
 import br.com.wirecard.billing.domain.Payment;
 import br.com.wirecard.billing.domain.PaymentStatus;
 import br.com.wirecard.billing.domain.PaymentType;
-import br.com.wirecard.billing.exception.ServiceUnavailableException;
 import br.com.wirecard.billing.repository.PaymentRepository;
 import com.google.common.base.Throwables;
 import lombok.extern.slf4j.Slf4j;

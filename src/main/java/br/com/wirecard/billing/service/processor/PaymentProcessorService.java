@@ -8,7 +8,6 @@ import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.validation.Valid;
 import javax.validation.Validator;
 
 import static java.util.stream.Collectors.joining;

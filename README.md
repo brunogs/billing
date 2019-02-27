@@ -20,3 +20,4 @@
 - Testes de validação do cartão
 - Documentar requisições no postman
 - Melhorar uso do docker (em andamento na branch docker)
+- HATEOAS

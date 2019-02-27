@@ -10,7 +10,7 @@ class IntegrationTestMockingConfig {
     private DetachedMockFactory factory = new DetachedMockFactory()
 
     @Bean
-    PaymentGatewayClient externalRankingService() {
+    PaymentGatewayClient paymentGatewayClient() {
         factory.Mock(PaymentGatewayClient)
     }
 }
